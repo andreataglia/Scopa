@@ -9,13 +9,13 @@
 class Card {
 public:
 
+    enum seed {Ori, Bastoni, Spade, Coppe};
+
     Card(seed seed, int value);
 
     int getValue() const;
 
     void setValue(int value);
-
-    enum seed {Ori, Bastoni, Spade, Coppe};
 
 private:
 
