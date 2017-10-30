@@ -6,6 +6,7 @@
 #define SCOPA_STATE_H
 
 #include "Card.h"
+#include "Deck.h"
 #include <memory>
 #include <list>
 
@@ -34,11 +35,9 @@ public:
     list<unique_ptr<Card>> myHand2;
     list<unique_ptr<Card>> enemyHand1;
     list<unique_ptr<Card>> enemyHand2;
-    list<unique_ptr<Card>> tableCards;
+    list<unique_ptr<Card>> tableCards; //keep them ordered
     list<unique_ptr<Card>> myPile;
     list<unique_ptr<Card>> enemyPile;
-
-    //TODO insert deck attribute here
 
 private:
     int gameTurn;

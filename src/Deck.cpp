@@ -5,27 +5,29 @@
 #include "Deck.h"
 #include <vector>
 #include <random>
+#include <algorithm>
+#include <memory>
 
 using namespace std;
 
 Deck::Deck() {
     for(int i=1; i<=10; i++){
-        unique_ptr<Card> card(new Card(Card::seed::Ori , i));
+        unique_ptr<Card> card(new Card(Card::Seed::Ori , i));
         cards.push_back(move(card));
     }
 
     for(int i=1; i<=10; i++){
-        unique_ptr<Card> card(new Card(Card::seed::Bastoni , i));
+        unique_ptr<Card> card(new Card(Card::Seed::Bastoni , i));
         cards.push_back(move(card));
     }
 
     for(int i=1; i<=10; i++){
-        unique_ptr<Card> card(new Card(Card::seed::Spade , i));
+        unique_ptr<Card> card(new Card(Card::Seed::Spade , i));
         cards.push_back(move(card));
     }
 
     for(int i=1; i<=10; i++){
-        unique_ptr<Card> card(new Card(Card::seed::Coppe , i));
+        unique_ptr<Card> card(new Card(Card::Seed::Coppe , i));
         cards.push_back(move(card));
     }
 }

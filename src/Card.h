@@ -9,16 +9,20 @@
 class Card {
 public:
 
-    enum seed {Ori, Bastoni, Spade, Coppe};
+    enum class Seed {Ori, Bastoni, Spade, Coppe};
 
-    Card(seed seed, int value);
+    Card(Seed seed, int value);
 
     int getValue() const;
 
     void setValue(int value);
 
-private:
+    Seed getSeed() const;
 
+    void setSeed(Seed seed);
+
+private:
+    Seed seed;
     int value;
 
 };

@@ -7,6 +7,7 @@
 
 
 #include <list>
+#include <memory>
 #include "Card.h"
 using namespace std;
 

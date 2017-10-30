@@ -4,8 +4,8 @@
 
 #include "Card.h"
 
-Card::Card(seed _seed, int _value) {
-    seed seed = _seed;
+Card::Card(Seed _seed, int _value) {
+    Seed seed = _seed;
     value = _value;
 }
 
@@ -15,6 +15,14 @@ void Card::setValue(int value) {
 
 int Card::getValue() const {
     return value;
+}
+
+Card::Seed Card::getSeed() const {
+    return seed;
+}
+
+void Card::setSeed(Card::Seed seed) {
+    Card::seed = seed;
 }
 
 

@@ -2,6 +2,7 @@
 // Created by Spranga on 30-Oct-17.
 //
 
+#include <vector>
 #include "State.h"
 
 void State::setTurn(int newTurn) {
@@ -16,31 +17,41 @@ int State::getTurn() const {
 void State::addCardToPlayer(unique_ptr<Card> card, int player) {
     switch (player) {
         case 1 :
-            myHand1.push_back(card);
+            myHand1.push_back(move(card));
         case 2 :
-            enemyHand1.push_back(card);
+            enemyHand1.push_back(move(card));
         case 3 :
-            myHand2.push_back(card);
+            myHand2.push_back(move(card));
         case 4 :
-            enemyHand2.push_back(card);
+            enemyHand2.push_back(move(card));
     }
 }
 
 void State::addCardToPile(unique_ptr<Card> card, int player) {
     switch (player) {
         case 1 :
-            myPile.push_back(card);
+            myPile.push_back(move(card));
         case 2 :
-            enemyPile.push_back(card);
+            enemyPile.push_back(move(card));
         case 3 :
-            myPile.push_back(card);
+            myPile.push_back(move(card));
         case 4 :
-            enemyPile.push_back(card);
+            enemyPile.push_back(move(card));
     }
 }
 
+//cards must be kept in ascending order of value for performance reasons
 void State::addCardToTable(unique_ptr<Card> card) {
-    tableCards.push_back(card);
+    list<unique_ptr<Card>>::iterator it;
+    for(it = tableCards.begin(); it != tableCards.end(); ++it) {
+        if (card->getValue() <= it->get()->getValue()){
+            if (card->getValue() == it->get()->getValue() && it->get()->getSeed()==Card::Seed::Ori){
+                it++;
+            }
+            tableCards.insert(it, move(card));
+            continue;
+        }
+    }
 }
 
 int State::getWhoPlays() const {
