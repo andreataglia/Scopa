@@ -16,9 +16,11 @@ class Deck {
 public:
     Deck();
 
-    template < typename T > void shuffle( std::list<T>& lst );
+    void shuffle();
 
-    list<unique_ptr<Card>> cards;
+    shared_ptr<Card> drawCard();
+
+    list<shared_ptr<Card>> cards;
 };
 
 

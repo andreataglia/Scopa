@@ -3,18 +3,35 @@
 //
 
 #include "Card.h"
+#include <iostream>
+using namespace std;
 
 Card::Card(Seed _seed, int _value) {
-    Seed seed = _seed;
+    setSeed(_seed);
     value = _value;
-}
-
-void Card::setValue(int value) {
-    Card::value = value;
 }
 
 int Card::getValue() const {
     return value;
+}
+
+void Card::printCard(){
+    cout << getValue() << " ";
+    switch (this->getSeed()) {
+        case Card::Seed::Ori:
+            cout << "ori" << endl;
+            break;
+        case Card::Seed::Bastoni:
+            cout << "bastoni" << endl;
+            break;
+        case Card::Seed::Coppe:
+            cout << "coppe" << endl;
+            break;
+        case Card::Seed::Spade:
+            cout << "spade" << endl;
+            break;
+    }
+
 }
 
 Card::Seed Card::getSeed() const {

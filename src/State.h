@@ -15,6 +15,9 @@ using namespace std;
 class State {
 
 public:
+
+    State();
+
     void setTurn(int newTurn);
 
     int getTurn() const;
@@ -25,19 +28,21 @@ public:
 
     void setWhoPlays(int whoPlays);
 
-    void addCardToPlayer(unique_ptr<Card> card, int player);
+    void addCardToPlayer(shared_ptr<Card> card, int player);
 
-    void addCardToPile(unique_ptr<Card> card, int player);
+    void addCardToPile(shared_ptr<Card> card, int player);
 
-    void addCardToTable(unique_ptr<Card> card);
+    void addCardToTable(shared_ptr<Card> card);
 
-    list<unique_ptr<Card>> myHand1;
-    list<unique_ptr<Card>> myHand2;
-    list<unique_ptr<Card>> enemyHand1;
-    list<unique_ptr<Card>> enemyHand2;
-    list<unique_ptr<Card>> tableCards; //keep them ordered
-    list<unique_ptr<Card>> myPile;
-    list<unique_ptr<Card>> enemyPile;
+    void printState();
+
+    list<shared_ptr<Card>> myHand1;
+    list<shared_ptr<Card>> myHand2;
+    list<shared_ptr<Card>> enemyHand1;
+    list<shared_ptr<Card>> enemyHand2;
+    list<shared_ptr<Card>> tableCards; //keep them ordered
+    list<shared_ptr<Card>> myPile;
+    list<shared_ptr<Card>> enemyPile;
 
 private:
     int gameTurn;

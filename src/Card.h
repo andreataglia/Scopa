@@ -15,16 +15,15 @@ public:
 
     int getValue() const;
 
-    void setValue(int value);
-
     Seed getSeed() const;
 
     void setSeed(Seed seed);
 
+    void printCard();
+
 private:
     Seed seed;
     int value;
-
 };
 
 
