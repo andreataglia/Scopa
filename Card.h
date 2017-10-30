@@ -7,6 +7,19 @@
 
 
 class Card {
+public:
+
+    Card(seed seed, int value);
+
+    int getValue() const;
+
+    void setValue(int value);
+
+    enum seed {Ori, Bastoni, Spade, Coppe};
+
+private:
+
+    int value;
 
 };
 
