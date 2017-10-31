@@ -12,9 +12,10 @@ class Game {
 public:
     Game(State state);
 
-    void playerPlaysCard(int player, unique_ptr<Card> card);
+    void playerDiscardCard(int player, shared_ptr<Card> card);
 
-    Deck deck;
+    void playerCatch(int player, shared_ptr<Card>, list<shared_ptr<Card>>);
+
     State currentState;
 };
 

@@ -28,7 +28,8 @@ int main() {
 
         current_state.printState();
 
-        //Game game(current_state);
+        Game game(current_state);
+
     }
     else current_state.printState();
     return 0;

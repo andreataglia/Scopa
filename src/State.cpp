@@ -54,15 +54,20 @@ void State::addCardToPile(shared_ptr<Card> card, int player) {
 //cards must be kept in ascending order of value for performance reasons
 void State::addCardToTable(shared_ptr<Card> card) {
     list<shared_ptr<Card>>::iterator it;
-    for(it = tableCards.begin(); it != tableCards.end(); ++it) {
-        if (card->getValue() <= it->get()->getValue()){
-            if (card->getValue() == it->get()->getValue() && it->get()->getSeed()==Card::Seed::Ori){
-                it++;
-            }
-            tableCards.insert(it, card);
-            continue;
-        }
+    it = tableCards.begin();
+    if(tableCards.empty()){
+        tableCards.insert(it, card);
     }
+    else{
+        while(it!= tableCards.end() && card.get()->getValue() > it->get()->getValue() ){
+            it++;
+        }
+        while(it != tableCards.end() && card.get()->getValue() > it->get()->getValue() && card.get()->getSeed() == Card::Seed::Ori){
+            it++;
+        }
+        tableCards.insert(it, card);
+    }
+
 }
 
 int State::getWhoPlays() const {
@@ -85,43 +90,36 @@ void State::setWhoPlays(int whoPlays) {
 void State::printState(){
 
     list<shared_ptr<Card>>::iterator it;
+    cout << endl << "myHand1: ";
     for(it = myHand1.begin(); it != myHand1.end(); ++it) {
-        cout << "myHand1: ";
         it->get()->printCard();
-        cout << endl;
     }
+    cout << endl << "myHand2: ";
     for(it = myHand2.begin(); it != myHand2.end(); ++it) {
-        cout << "myHand2: ";
         it->get()->printCard();
-        cout << endl;
     }
+    cout << endl << "enemyHand1: ";
     for(it = enemyHand1.begin(); it != enemyHand1.end(); ++it) {
-        cout << "enemyHand1: ";
         it->get()->printCard();
-        cout << endl;
     }
+    cout << endl << "enemyHand2: ";
     for(it = enemyHand2.begin(); it != enemyHand2.end(); ++it) {
-        cout << "enemyHand2: ";
         it->get()->printCard();
-        cout << endl;
     }
+    cout << endl << "myPile: ";
     for(it = myPile.begin(); it != myPile.end(); ++it) {
-        cout << "myPile: ";
         it->get()->printCard();
-        cout << endl;
     }
+    cout << endl << "enemyPile: ";
     for(it = enemyPile.begin(); it != enemyPile.end(); ++it) {
-        cout << "enemyPile: ";
         it->get()->printCard();
-        cout << endl;
     }
+    cout << endl << "tableCards: ";
     for(it = tableCards.begin(); it != tableCards.end(); ++it) {
-        cout << "tableCards: ";
         it->get()->printCard();
-        cout << endl;
     }
 
-    cout << "current turn: " << getTurn() << endl;
+    cout << endl << "current turn: " << getTurn() << endl;
     cout << "current player: " << getWhoPlays() << endl;
 
 }
