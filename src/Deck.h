@@ -8,6 +8,7 @@
 
 #include <list>
 #include <memory>
+#include <vector>
 #include "Card.h"
 using namespace std;
 
@@ -22,7 +23,7 @@ public:
 
     shared_ptr<Card> drawCard();
 
-    list<shared_ptr<Card>> cards;
+    vector<shared_ptr<Card>> cards;
 };
 
 

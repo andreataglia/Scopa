@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 #include "Game.h"
 
 Game::Game(State state) {
@@ -16,34 +17,45 @@ void Game::playerPlaysCard(int player) {
     switch (player) {
         case 1 :
             //TODO currentState.myHand1.select random
-            currentState.myHand1.remove(card);
+            currentState.myHand1.erase(std::remove(currentState.myHand1.begin(), currentState.myHand1.end(), card), currentState.myHand1.end());
             break;
         case 2 :
-            currentState.enemyHand1.remove(card);
+            currentState.enemyHand1.erase(std::remove(currentState.enemyHand1.begin(), currentState.enemyHand1.end(), card), currentState.enemyHand1.end());
             break;
         case 3 :
-            currentState.myHand2.remove(card);
+            currentState.myHand2.erase(std::remove(currentState.myHand2.begin(), currentState.myHand2.end(), card), currentState.myHand2.end());
             break;
         case 4 :
-            currentState.enemyHand2.remove(card);
+            currentState.enemyHand2.erase(std::remove(currentState.enemyHand2.begin(), currentState.enemyHand2.end(), card), currentState.enemyHand2.end());
             break;
     }
 
     bool resolved = false;
     //check if there is a card of same value
-    vector<shared_ptr<Card>>::iterator it = currentState.tableCards.begin();
+    auto it = currentState.tableCards.begin();
     while (it != currentState.tableCards.end() && !resolved) {
         if (card->getValue() == it->get()->getValue()) {
             currentState.addCardToPile(card, player);
             currentState.addCardToPile(*it, player);
-            currentState.tableCards.remove(*it);
+            currentState.tableCards.erase(std::remove(currentState.tableCards.begin(), currentState.tableCards.end(), *it), currentState.tableCards.end());
             checkScopa(player);
             resolved = true;
         }
         it++;
     }
+    if (!resolved && currentState.tableCards.size() > 2) {
+        it = currentState.tableCards.begin();
+        auto it2 = currentState.tableCards.begin()++;
+        auto it3 = currentState.tableCards.begin()++;
+        it3++;
+        while (it != currentState.tableCards.end() && !resolved) {
+
+        }
+    }
 
     //TODO check if more cards can sum up to be taken
+
+    advanceGame();
 }
 
 //returns difference between myPoints and enemyPoints
@@ -55,11 +67,11 @@ int Game::playFullGame() {
 }
 
 void Game::checkScopa(int player) {
-    if (currentState.tableCards.empty()) {
+    if (currentState.tableCards.empty() && !deck.cards.empty()) {
         if (player % 2 == 0) {
-            myPoints++;
-        } else {
             enemyPoints++;
+        } else {
+            myPoints++;
         }
     }
 }
@@ -76,7 +88,9 @@ void Game::advanceGame() {
             currentState.enemyHand2.push_back(deck.drawCard());
         }
     }
-    //find out what stage we are at
+    currentState.setWhoPlays(currentState.getWhoPlays() + 1);
+    currentState.setTurn(currentState.getTurn() + 1);
+
     while (true) {
         playerPlaysCard(currentState.getWhoPlays());
     }
@@ -92,7 +106,7 @@ long random_at_most(long max) {
 
     long x;
     do {
-        //x = rnd();
+        x = rand();
     }
         // This is carefully written not to overflow
     while (num_rand - defect <= (unsigned long)x);
