@@ -9,8 +9,8 @@
 State::State() {
     deck = Deck();
     deck.shuffle();
-    setTurn(0);
-    setWhoPlays(0);
+    setTurn(1);
+    setWhoPlays(1);
 }
 
 void State::setTurn(int newTurn) {

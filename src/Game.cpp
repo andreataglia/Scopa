@@ -219,7 +219,6 @@ int Game::rollOut(bool verbose) {
     while (!gameOver) {
         playerPlaysCard(currentState.getWhoPlays());
         advanceGame();
-        currentState.printState();
     }
     vector<shared_ptr<Card>>::iterator it;
     for (it = currentState.tableCards.begin(); it != currentState.tableCards.end(); ++it) {
@@ -340,7 +339,9 @@ void Game::simulateGames(State state, int times, short card) {
     Game copyGame = game;
     int p = 0;
     for (int i = 0; i < times; ++i) {
+        game.currentState.deck.shuffle();
         p += game.rollOut(false);
+        //TODO do we free up memory this way?
         game = copyGame;
     }
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;

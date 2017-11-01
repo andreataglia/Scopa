@@ -131,11 +131,13 @@ int main() {
             }
         }
         game.initGame(tableCards, myHand1, myHand2, player);
-        game.currentState.printState();
-
     } else {
         game.initRandomGame();
     }
+
+    game.currentState.printState();
+    game.rollOut(true);
+
     return 0;
 }
 
