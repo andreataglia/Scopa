@@ -35,35 +35,6 @@ void Game::initRandomGame() {
     }
 }
 
-/*void Game::updateState(Card myCard, vector<Card> cardsChosen, bool scopa) {
-    switch (currentState.getWhoPlays()) {
-        case 1 :
-            if(currentState.myHand1.)
-            break;
-        case 2 :
-
-            break;
-        case 3 :
-
-            break;
-        case 4 :
-
-            break;
-    }
-    vector<shared_ptr<Card>>::iterator it;
-    for (it = cardsChosen.begin(); it != cardsChosen.end(); it++) {
-        currentState.tableCards.erase(std::remove(currentState.tableCards.begin(), currentState.tableCards.end(), *it),
-                                      currentState.tableCards.end());
-        if (currentState.getWhoPlays() % 2 == 1)
-            currentState.myPile.push_back(*it);
-        else
-            currentState.enemyPile.push_back(*it);
-    }
-    if (scopa && currentState.getWhoPlays() % 2 == 1) {
-        myPoints++;
-    } else enemyPoints++;
-}*/
-
 void Game::resolveCardPlayed(int player, shared_ptr<Card> card) {
     bool resolved = false;
     //check if there is ONE card of same value
