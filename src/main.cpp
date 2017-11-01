@@ -71,7 +71,7 @@ int main() {
                      << " followed by a ; like this:" << endl << " 1,o;2,s;3,b;4,c" << endl;
                 string s;
                 cin >> s;
-                tableCards = toVector(s, current_state.deck);
+                tableCards = toVector(s, game.currentState.deck);
                 correct = true;
             }
             catch (int e) {
@@ -86,7 +86,7 @@ int main() {
                 cout << "give me the myHand1 cards" << endl;
                 string s1;
                 cin >> s1;
-                myHand1 = toVector(s1, current_state.deck);
+                myHand1 = toVector(s1, game.currentState.deck);
                 correct = true;
             }
             catch (int e) {
@@ -103,7 +103,7 @@ int main() {
                 cout << "give me the myHand2 cards" << endl;
                 string s2;
                 cin >> s2;
-                myHand2 = toVector(s2, current_state.deck);
+                myHand2 = toVector(s2, game.currentState.deck);
                 correct = true;
             }
 
@@ -131,6 +131,7 @@ int main() {
             }
         }
         game.initGame(tableCards, myHand1, myHand2, player);
+
     } else {
         game.initRandomGame();
     }
