@@ -40,6 +40,8 @@ Card::Card(Seed _seed, int _value) {
     }
 }
 
+Card::Card(){}
+
 int Card::getValue() const {
     return value;
 }

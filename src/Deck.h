@@ -23,6 +23,8 @@ public:
 
     shared_ptr<Card> drawCard();
 
+    shared_ptr<Card> drawCard(int, Card::Seed);
+
     vector<shared_ptr<Card>> cards;
 };
 

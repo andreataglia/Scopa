@@ -53,3 +53,19 @@ void Deck::print() {
         it->get()->printCard();
     }
 }
+
+shared_ptr<Card> Deck::drawCard(int value, Card::Seed seed){
+    vector<shared_ptr<Card>>::iterator it;
+    try{
+        for (it = cards.begin(); it != cards.end(); ++it) {
+            if(it->get()->getValue()==value && it->get()->getSeed() == seed){
+                cards.erase(it);
+                return *it;
+            }
+        }
+        throw 1;
+    }
+    catch (int e){
+        throw 1;
+    }
+}

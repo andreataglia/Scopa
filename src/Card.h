@@ -11,6 +11,8 @@ public:
 
     enum class Seed {Ori, Bastoni, Spade, Coppe};
 
+    Card();
+
     Card(Seed seed, int value);
 
     int getValue() const;

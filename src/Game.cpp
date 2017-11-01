@@ -9,9 +9,7 @@ Game::Game(State state) {
 }
 
 void
-Game::initGame(vector <shared_ptr<Card>> tableCards, vector <shared_ptr<Card>> myHand1,
-               vector <shared_ptr<Card>> myHand2,
-               int playerWhoPlays) {
+Game::initGame(vector<shared_ptr<Card>> tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2, int playerWhoPlays) {
     currentState.setWhoPlays(playerWhoPlays);
     currentState.tableCards = tableCards;
     currentState.myHand1 = myHand1;
@@ -37,25 +35,19 @@ void Game::initRandomGame() {
     }
 }
 
-void Game::updateState(shared_ptr<Card> myCard, vector <shared_ptr<Card>> cardsChosen, bool scopa) {
+/*void Game::updateState(Card myCard, vector<Card> cardsChosen, bool scopa) {
     switch (currentState.getWhoPlays()) {
         case 1 :
-            currentState.myHand1.erase(std::remove(currentState.myHand1.begin(), currentState.myHand1.end(), myCard),
-                                       currentState.myHand1.end());
+            if(currentState.myHand1.)
             break;
         case 2 :
-            currentState.enemyHand1.erase(
-                    std::remove(currentState.enemyHand1.begin(), currentState.enemyHand1.end(), myCard),
-                    currentState.enemyHand1.end());
+
             break;
         case 3 :
-            currentState.myHand2.erase(std::remove(currentState.myHand2.begin(), currentState.myHand2.end(), myCard),
-                                       currentState.myHand2.end());
+
             break;
         case 4 :
-            currentState.enemyHand2.erase(
-                    std::remove(currentState.enemyHand2.begin(), currentState.enemyHand2.end(), myCard),
-                    currentState.enemyHand2.end());
+
             break;
     }
     vector<shared_ptr<Card>>::iterator it;
@@ -70,7 +62,7 @@ void Game::updateState(shared_ptr<Card> myCard, vector <shared_ptr<Card>> cardsC
     if (scopa && currentState.getWhoPlays() % 2 == 1) {
         myPoints++;
     } else enemyPoints++;
-}
+}*/
 
 void Game::resolveCardPlayed(int player, shared_ptr<Card> card) {
     bool resolved = false;
