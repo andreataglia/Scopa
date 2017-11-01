@@ -16,19 +16,19 @@ int Card::getValue() const {
 }
 
 void Card::printCard(){
-    cout << getValue() << " ";
+    cout << " " << getValue() << " ";
     switch (this->getSeed()) {
         case Card::Seed::Ori:
-            cout << "ori ";
+            cout << "ori";
             break;
         case Card::Seed::Bastoni:
-            cout << "bastoni ";
+            cout << "bastoni";
             break;
         case Card::Seed::Coppe:
-            cout << "coppe ";
+            cout << "coppe";
             break;
         case Card::Seed::Spade:
-            cout << "spade ";
+            cout << "spade";
             break;
     }
 

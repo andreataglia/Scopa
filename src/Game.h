@@ -12,11 +12,22 @@ class Game {
 public:
     Game(State state);
 
-    void playerDiscardCard(int player, shared_ptr<Card> card);
+    void playerPlaysCard(int player);
+
+    void advanceGame();
+
+    int playFullGame();
+
+    long random_at_most(long max);
 
     void playerCatch(int player, shared_ptr<Card>, list<shared_ptr<Card>>);
 
     State currentState;
+    int myPoints;
+    int enemyPoints;
+    Deck deck;
+private:
+    void checkScopa(int player);
 };
 
 

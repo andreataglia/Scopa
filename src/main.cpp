@@ -1,7 +1,5 @@
 #include <iostream>
 #include "Game.h"
-#include "State.h"
-#include "Deck.h"
 
 int main() {
     using namespace std;

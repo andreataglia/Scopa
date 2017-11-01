@@ -18,6 +18,8 @@ public:
 
     void shuffle();
 
+    void print();
+
     shared_ptr<Card> drawCard();
 
     list<shared_ptr<Card>> cards;
