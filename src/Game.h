@@ -12,6 +12,8 @@ class Game {
 public:
     Game(State state);
 
+    void initializeGame();
+
     void playerPlaysCard(int player);
 
     void advanceGame();
@@ -20,7 +22,7 @@ public:
 
     long random_at_most(long max);
 
-    void playerCatch(int player, shared_ptr<Card>, list<shared_ptr<Card>>);
+    void playerCatch(int player, shared_ptr<Card>, vector<shared_ptr<Card>>);
 
     State currentState;
     int myPoints;

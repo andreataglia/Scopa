@@ -1,7 +1,13 @@
+#include <vector>
 #include "Game.h"
 
 Game::Game(State state) {
     currentState = state;
+}
+
+void Game::initializeGame(){
+    currentState.setTurn(1);
+    currentState.setWhoPlays(1);
 }
 
 void Game::playerPlaysCard(int player) {
@@ -25,7 +31,7 @@ void Game::playerPlaysCard(int player) {
 
     bool resolved = false;
     //check if there is a card of same value
-    list<shared_ptr<Card>>::iterator it = currentState.tableCards.begin();
+    vector<shared_ptr<Card>>::iterator it = currentState.tableCards.begin();
     while (it != currentState.tableCards.end() && !resolved) {
         if (card->getValue() == it->get()->getValue()) {
             currentState.addCardToPile(card, player);
@@ -64,10 +70,10 @@ void Game::advanceGame() {
     if (currentState.myHand1.empty() && currentState.enemyHand1.empty() && currentState.myHand2.empty() &&
         currentState.enemyHand2.empty()) {
         for (int i = 0; i < 3; ++i) {
-            currentState.myHand1.push_front(deck.drawCard());
-            currentState.enemyHand1.push_front(deck.drawCard());
-            currentState.myHand2.push_front(deck.drawCard());
-            currentState.enemyHand2.push_front(deck.drawCard());
+            currentState.myHand1.push_back(deck.drawCard());
+            currentState.enemyHand1.push_back(deck.drawCard());
+            currentState.myHand2.push_back(deck.drawCard());
+            currentState.enemyHand2.push_back(deck.drawCard());
         }
     }
     //find out what stage we are at
@@ -94,8 +100,9 @@ long random_at_most(long max) {
     // Truncated division is intentional
     return x/bin_size;
 }
-void Game::playerCatch(int player, shared_ptr<Card> playerCard, list<shared_ptr<Card>> tableCardsChosen){
-    list<shared_ptr<Card>>::iterator it;
+
+void Game::playerCatch(int player, shared_ptr<Card> playerCard, vector<shared_ptr<Card>> tableCardsChosen){
+    vector<shared_ptr<Card>>::iterator it;
     int sum=0;
     for(it = tableCardsChosen.begin(); it!=tableCardsChosen.end(); ++it){
         sum += it->get()->getValue();

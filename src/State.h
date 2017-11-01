@@ -36,13 +36,13 @@ public:
 
     void printState();
 
-    list<shared_ptr<Card>> myHand1;
-    list<shared_ptr<Card>> myHand2;
-    list<shared_ptr<Card>> enemyHand1;
-    list<shared_ptr<Card>> enemyHand2;
-    list<shared_ptr<Card>> tableCards; //keep them ordered
-    list<shared_ptr<Card>> myPile;
-    list<shared_ptr<Card>> enemyPile;
+    vector<shared_ptr<Card>> myHand1;
+    vector<shared_ptr<Card>> myHand2;
+    vector<shared_ptr<Card>> enemyHand1;
+    vector<shared_ptr<Card>> enemyHand2;
+    vector<shared_ptr<Card>> tableCards; //keep them ordered
+    vector<shared_ptr<Card>> myPile;
+    vector<shared_ptr<Card>> enemyPile;
 
 private:
     int gameTurn;

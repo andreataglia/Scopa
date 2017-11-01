@@ -54,7 +54,7 @@ void State::addCardToPile(shared_ptr<Card> card, int player) {
 //cards must be kept in ascending order of value for performance reasons
 void State::addCardToTable(shared_ptr<Card> card) {
     if (!tableCards.empty()) {
-        list<shared_ptr<Card>>::iterator it = tableCards.begin();
+        vector<shared_ptr<Card>>::iterator it = tableCards.begin();
         if (card->getSeed() == Card::Seed::Ori) {
             while (it != tableCards.end() && card->getValue() > it->get()->getValue()) {
                 it++;
@@ -88,7 +88,7 @@ void State::setWhoPlays(int whoPlays) {
 }
 
 void State::printState() {
-    list<shared_ptr<Card>>::iterator it;
+    vector<shared_ptr<Card>>::iterator it;
     cout << endl << "myHand1: ";
     for (it = myHand1.begin(); it != myHand1.end(); ++it) {
         it->get()->printCard();
