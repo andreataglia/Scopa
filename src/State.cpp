@@ -9,7 +9,6 @@
 State::State() {};
 
 void State::setTurn(int newTurn) {
-    if (!(newTurn <= 4 && newTurn >= 1)) throw "Turn is not between 1 and 4!";
     gameTurn = newTurn;
 }
 
@@ -31,6 +30,8 @@ void State::addCardToPlayer(shared_ptr<Card> card, int player) {
         case 4 :
             enemyHand2.push_back(card);
             break;
+        default:
+            throw "player does not exist";
     }
 }
 
@@ -48,13 +49,15 @@ void State::addCardToPile(shared_ptr<Card> card, int player) {
         case 4 :
             enemyPile.push_back(card);
             break;
+        default:
+            throw "player does not exist";
     }
 }
 
 //cards must be kept in ascending order of value for performance reasons
 void State::addCardToTable(shared_ptr<Card> card) {
     if (!tableCards.empty()) {
-        vector<shared_ptr<Card>>::iterator it = tableCards.begin();
+        auto it = tableCards.begin();
         if (card->getSeed() == Card::Seed::Ori) {
             while (it != tableCards.end() && card->getValue() > it->get()->getValue()) {
                 it++;
@@ -83,8 +86,8 @@ void State::advanceTurn() {
     setTurn(t);
 }
 
-void State::setWhoPlays(int whoPlays) {
-    State::whoPlays = whoPlays;
+void State::setWhoPlays(int _whoPlays) {
+    whoPlays = _whoPlays;
 }
 
 void State::printState() {
@@ -121,3 +124,17 @@ void State::printState() {
     cout << endl << "current player: " << getWhoPlays() << endl;
 }
 
+vector<shared_ptr<Card>> *State::getCurrentPlayerHand() {
+    switch (getWhoPlays()) {
+        case 1:
+            return &myHand1;
+        case 2:
+            return &enemyHand1;
+        case 3:
+            return &myHand2;
+        case 4:
+            return &enemyHand2;
+        default:
+            throw "player does not exist";
+    }
+}

@@ -12,7 +12,9 @@ class Game {
 public:
     Game(State state);
 
-    void initGame(vector<shared_ptr<Card>> tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2, int playerWhoPlays);
+    void
+    initGame(vector<shared_ptr<Card>> tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2,
+             int playerWhoPlays);
 
     void initRandomGame();
 
@@ -22,18 +24,28 @@ public:
 
     void advanceGame();
 
-    int playFullGame();
+    void suggestMove(int accuracy);
 
-    long random_at_most(long max);
+    static short random_at_most(short max);
 
-    void playerCatch(int player, shared_ptr<Card>, vector<shared_ptr<Card>>);
+    int rollOut();
 
     State currentState;
-    int myPoints;
-    int enemyPoints;
+    int myPoints = 0;
+    int enemyPoints = 0;
     Deck deck;
+    int lastPlayerToCatch = 0;
+    bool gameOver = false;
+
 private:
+
     void checkScopa(int player);
+
+    void playerPlaysCard(int player, int card_position);
+
+    void resolveCardPlayed(int player, shared_ptr<Card> card);
+
+    void simulateGames(State state, int times, short card);
 };
 
 

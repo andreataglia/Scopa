@@ -11,24 +11,28 @@ int main() {
     cout << "Do you wanna create a random game? y/n" << std::endl;
     string choice;
     cin >> choice;
-    if (choice == "y"){
+    if (choice == "y") {
         current_state.setTurn(1);
         current_state.setWhoPlays(1);
-        for(int i=1; i<=4; i++){
-            for (int j=0; j<=2; j++){
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 0; j <= 2; j++) {
                 current_state.addCardToPlayer(deck.drawCard(), i);
             }
         }
 
-        for(int i=0; i<=3; i++){
+        for (int i = 0; i <= 3; i++) {
             current_state.addCardToTable(deck.drawCard());
         }
 
         current_state.printState();
-
         Game game(current_state);
+        game.rollOut();
 
-    }
-    else current_state.printState();
+    } else {
+        Game game(current_state);
+        game.initRandomGame();
+        game.currentState.printState();
+        game.rollOut();
+    };
     return 0;
 }

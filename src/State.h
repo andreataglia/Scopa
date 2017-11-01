@@ -47,6 +47,8 @@ public:
 private:
     int gameTurn;
     int whoPlays;
+
+    vector<shared_ptr<Card>> * getCurrentPlayerHand();
 };
 
 

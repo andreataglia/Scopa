@@ -24,6 +24,11 @@ public:
 private:
     Seed seed;
     int value;
+    int primieraValue;
+public:
+    int getPrimieraValue() const;
+
+    void setPrimieraValue(int primieraValue);
 };
 
 
