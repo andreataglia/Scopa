@@ -28,12 +28,11 @@ public:
 
     static short random_at_most(short max);
 
-    int rollOut();
+    int rollOut(bool verbose);
 
     State currentState;
     int myPoints = 0;
     int enemyPoints = 0;
-    Deck deck;
     int lastPlayerToCatch = 0;
     bool gameOver = false;
 

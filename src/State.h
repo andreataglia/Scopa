@@ -34,6 +34,8 @@ public:
 
     void addCardToTable(shared_ptr<Card> card);
 
+    vector<shared_ptr<Card>> *getCurrentPlayerHand();
+
     void printState();
 
     vector<shared_ptr<Card>> myHand1;
@@ -43,12 +45,10 @@ public:
     vector<shared_ptr<Card>> tableCards; //keep them ordered
     vector<shared_ptr<Card>> myPile;
     vector<shared_ptr<Card>> enemyPile;
-
+    Deck deck;
 private:
     int gameTurn;
     int whoPlays;
-
-    vector<shared_ptr<Card>> * getCurrentPlayerHand();
 };
 
 

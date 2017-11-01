@@ -26,13 +26,14 @@ int main() {
 
         current_state.printState();
         Game game(current_state);
-        game.rollOut();
+        game.rollOut(false);
 
     } else {
         Game game(current_state);
         game.initRandomGame();
         game.currentState.printState();
-        game.rollOut();
+        //game.suggestMove(100);
+        game.rollOut(true);
     };
     return 0;
 }

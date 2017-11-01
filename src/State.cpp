@@ -6,7 +6,12 @@
 #include "State.h"
 #include <iostream>
 
-State::State() {};
+State::State() {
+    deck = Deck();
+    deck.shuffle();
+    setTurn(0);
+    setWhoPlays(0);
+}
 
 void State::setTurn(int newTurn) {
     gameTurn = newTurn;
