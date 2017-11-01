@@ -12,7 +12,11 @@ class Game {
 public:
     Game(State state);
 
-    void initializeGame();
+    void initGame(vector<shared_ptr<Card>> tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2, int playerWhoPlays);
+
+    void initRandomGame();
+
+    void updateState(shared_ptr<Card> myCard, vector<shared_ptr<Card>> cardsChosen, bool scopa);
 
     void playerPlaysCard(int player);
 

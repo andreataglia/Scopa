@@ -4,11 +4,63 @@
 
 Game::Game(State state) {
     currentState = state;
+    Deck deck;
+    deck.shuffle();
 }
 
-void Game::initializeGame(){
+void Game::initGame(vector<shared_ptr<Card>> tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2, int playerWhoPlays){
+    currentState.setWhoPlays(playerWhoPlays);
+    currentState.tableCards = tableCards;
+    currentState.myHand1 = myHand1;
+    currentState.myHand2 = myHand2;
+    for (int i = 0; i < 3; ++i) {
+        currentState.enemyHand1.push_back(deck.drawCard());
+        currentState.enemyHand2.push_back(deck.drawCard());
+    }
+}
+
+void Game::initRandomGame() {
     currentState.setTurn(1);
     currentState.setWhoPlays(1);
+    for (int i = 0; i < 3; ++i) {
+        currentState.myHand1.push_back(deck.drawCard());
+        currentState.enemyHand1.push_back(deck.drawCard());
+        currentState.myHand2.push_back(deck.drawCard());
+        currentState.enemyHand2.push_back(deck.drawCard());
+    }
+    for(int i = 0; i < 4; i++){
+        currentState.tableCards.push_back(deck.drawCard());
+    }
+    currentState.printState();
+}
+
+void Game::updateState(shared_ptr<Card> myCard, vector<shared_ptr<Card>> cardsChosen, bool scopa){
+    switch (currentState.getWhoPlays()) {
+        case 1 :
+            currentState.myHand1.erase(std::remove(currentState.myHand1.begin(), currentState.myHand1.end(), myCard), currentState.myHand1.end());
+            break;
+        case 2 :
+            currentState.enemyHand1.erase(std::remove(currentState.enemyHand1.begin(), currentState.enemyHand1.end(), myCard), currentState.enemyHand1.end());
+            break;
+        case 3 :
+            currentState.myHand2.erase(std::remove(currentState.myHand2.begin(), currentState.myHand2.end(), myCard), currentState.myHand2.end());
+            break;
+        case 4 :
+            currentState.enemyHand2.erase(std::remove(currentState.enemyHand2.begin(), currentState.enemyHand2.end(), myCard), currentState.enemyHand2.end());
+            break;
+    }
+    vector<shared_ptr<Card>>::iterator it;
+    for(it = cardsChosen.begin(); it!= cardsChosen.end(); it++ ){
+        currentState.tableCards.erase(std::remove(currentState.tableCards.begin(), currentState.tableCards.end(), *it), currentState.tableCards.end());
+        if(currentState.getWhoPlays()%2 == 1)
+            currentState.myPile.push_back(*it);
+        else
+            currentState.enemyPile.push_back(*it);
+    }
+    if(scopa && currentState.getWhoPlays()%2 == 1) {
+        myPoints++;
+    }
+    else enemyPoints++;
 }
 
 void Game::playerPlaysCard(int player) {
@@ -115,6 +167,7 @@ long random_at_most(long max) {
     return x/bin_size;
 }
 
+/*
 void Game::playerCatch(int player, shared_ptr<Card> playerCard, vector<shared_ptr<Card>> tableCardsChosen){
     vector<shared_ptr<Card>>::iterator it;
     int sum=0;
@@ -129,4 +182,6 @@ void Game::playerCatch(int player, shared_ptr<Card> playerCard, vector<shared_pt
         }
     }
     else throw "not valid catch";
-}
+}*/
+
+
