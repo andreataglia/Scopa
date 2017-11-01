@@ -58,9 +58,10 @@ shared_ptr<Card> Deck::drawCard(int value, Card::Seed seed){
     vector<shared_ptr<Card>>::iterator it;
     try{
         for (it = cards.begin(); it != cards.end(); ++it) {
-            if(it->get()->getValue()==value && it->get()->getSeed() == seed){
+            if(it->get()->getValue() == value && it->get()->getSeed() == seed){
+                shared_ptr<Card> tmp = *it;
                 cards.erase(it);
-                return *it;
+                return tmp;
             }
         }
         throw 1;
