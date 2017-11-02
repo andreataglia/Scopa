@@ -84,7 +84,29 @@ void move(string stringCard, vector<shared_ptr<Card>> &v1, vector<shared_ptr<Car
                 it--;
             }
         }
-        if(tmp == nullptr){
+        if (tmp == nullptr) {
+            throw 1;
+        }
+    }
+    catch (int e) {
+        throw 1;
+    }
+}
+
+void moveToTable(string stringCard, vector<shared_ptr<Card>> &v1, State &currentState) {
+    vector<string> vectorCard = split(stringCard, ",");
+    vector<shared_ptr<Card>>::iterator it;
+    shared_ptr<Card> tmp = nullptr;
+    try {
+        for (it = v1.begin(); it != v1.end(); ++it) {
+            if (it->get()->getValue() == stoi(vectorCard[0]) && it->get()->getSeed() == sToSeed(vectorCard[1])) {
+                tmp = *it;
+                v1.erase(it);
+                currentState.addCardToTable(tmp);
+                it--;
+            }
+        }
+        if (tmp == nullptr) {
             throw 1;
         }
     }
@@ -180,7 +202,8 @@ int main() {
     game.currentState.printState();
     bool finished = false;
     while (!finished) {
-        cout << "\n choose what do you want to do:\nm -> make an action\ns->suggest an action\np->print state\nq->quit" << endl;
+        cout << "\n choose what do you want to do:\nm -> make an action\ns->suggest an action\np->print state\nq->quit"
+             << endl;
         cin >> choice;
         switch (choice.at(0)) {
             case 'p':
@@ -193,64 +216,74 @@ int main() {
                 finished = true;
                 break;
             case 'm':
-                string s;
-                cout << "give me your card" << endl;
-                cin >> s;
-                cout << "give me the table cards chosen or digit none if you don't choose anything" << endl;
-                string s1;
-                cin >> s1;
-                if(s1 == "none"){
-                    switch (game.currentState.getWhoPlays()) {
-                        case 1 :
-                            move(s, game.currentState.myHand1, game.currentState.tableCards);
-                            break;
-                        case 2 :
-                            move(s, game.currentState.enemyHand1, game.currentState.tableCards);
-                            break;
-                        case 3 :
-                            move(s, game.currentState.myHand2, game.currentState.tableCards);
-                            break;
-                        case 4 :
-                            move(s, game.currentState.enemyHand2, game.currentState.tableCards);
-                            break;
-                    }
-                    game.advanceGame();
-                    break;
-                }
-                else {
-                    switch (game.currentState.getWhoPlays()) {
-                        case 1 :
-                            move(s, game.currentState.myHand1, game.currentState.myPile);
-                            break;
-                        case 2 :
-                            move(s, game.currentState.enemyHand1, game.currentState.enemyPile);
-                            break;
-                        case 3 :
-                            move(s, game.currentState.myHand2, game.currentState.myPile);
-                            break;
-                        case 4 :
-                            move(s, game.currentState.enemyHand2, game.currentState.enemyPile);
-                            break;
-                    }
+                bool correct = false;
+                while (!correct) {
+                    try {
+                        string s;
+                        cout << "give me your card" << endl;
+                        cin >> s;
+                        cout << "give me the table cards chosen or digit none if you don't choose anything" << endl;
+                        string s1;
+                        cin >> s1;
+                        if (s1 == "none") {
+                            switch (game.currentState.getWhoPlays()) {
+                                case 1 :
+                                    moveToTable(s, game.currentState.myHand1, game.currentState);
+                                    break;
+                                case 2 :
+                                    moveToTable(s, game.currentState.enemyHand1, game.currentState);
+                                    break;
+                                case 3 :
+                                    moveToTable(s, game.currentState.myHand2, game.currentState);
+                                    break;
+                                case 4 :
+                                    moveToTable(s, game.currentState.enemyHand2, game.currentState);
+                                    break;
+                            }
+                            game.advanceGame();
+                            correct = true;
+                        } else {
+                            switch (game.currentState.getWhoPlays()) {
+                                case 1 :
+                                    move(s, game.currentState.myHand1, game.currentState.myPile);
+                                    break;
+                                case 2 :
+                                    move(s, game.currentState.enemyHand1, game.currentState.enemyPile);
+                                    break;
+                                case 3 :
+                                    move(s, game.currentState.myHand2, game.currentState.myPile);
+                                    break;
+                                case 4 :
+                                    move(s, game.currentState.enemyHand2, game.currentState.enemyPile);
+                                    break;
+                            }
 
-                    vector<string> tableCardsChosen = split(s1, ";");
-                    vector<string>::iterator it;
-                    for (it = tableCardsChosen.begin(); it != tableCardsChosen.end(); it++) {
-                        if (game.currentState.getWhoPlays() % 2 == 1) {
-                            move(*it, game.currentState.tableCards, game.currentState.myPile);
-                        } else move(*it, game.currentState.tableCards, game.currentState.enemyPile);
-                    }
+                            vector<string> tableCardsChosen = split(s1, ";");
+                            vector<string>::iterator it;
+                            for (it = tableCardsChosen.begin(); it != tableCardsChosen.end(); it++) {
+                                if (game.currentState.getWhoPlays() % 2 == 1) {
+                                    move(*it, game.currentState.tableCards, game.currentState.myPile);
+                                } else move(*it, game.currentState.tableCards, game.currentState.enemyPile);
+                            }
 
-                    cout << "is Scopa? y/n" << endl;
-                    cin >> s;
-                    if (s == "y") {
-                        if (game.currentState.getWhoPlays() % 2 == 1) {
-                            game.myPoints++;
-                        } else game.enemyPoints++;
+                            cout << "is Scopa? y/n" << endl;
+                            cin >> s;
+                            if (s == "y") {
+                                if (game.currentState.getWhoPlays() % 2 == 1) {
+                                    game.myPoints++;
+                                } else game.enemyPoints++;
+                            }
+                            game.advanceGame();
+                            correct = true;
+                        }
                     }
-                    game.advanceGame();
-                    break;
+                    catch (int e) {
+                        if (e == 1) {
+                            cout << "card not found" << endl;
+                        }
+                    }
                 }
+                break;
         }
     }
     game.currentState.printState();
