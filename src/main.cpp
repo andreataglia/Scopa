@@ -74,16 +74,17 @@ vector<shared_ptr<Card>> toVector(string s, Deck &d) {
 void move(string stringCard, vector<shared_ptr<Card>> &v1, vector<shared_ptr<Card>> &v2) {
     vector<string> vectorCard = split(stringCard, ",");
     auto it = v1.begin();
-    shared_ptr<Card> tmp = nullptr;
+    bool found = false;
     try {
-        while (it != v1.end() || tmp != nullptr) {
+        while (it != v1.end() && !found) {
             if (it->get()->getValue() == stoi(vectorCard[0]) && it->get()->getSeed() == sToSeed(vectorCard[1])) {
-                tmp = *it;
-                v2.push_back(tmp);
+                v2.push_back(*it);
                 v1.erase(it);
+                found = true;
             }
+            it++;
         }
-        if (tmp == nullptr) {
+        if (!found) {
             throw 1;
         }
     }
@@ -208,7 +209,7 @@ int main() {
         move("3,o", game.currentState.deck.cards, game.currentState.myPile);
         move("7,b", game.currentState.deck.cards, game.currentState.myPile);
         move("5,s", game.currentState.deck.cards, game.currentState.enemyPile);
-        move("5,s", game.currentState.deck.cards, game.currentState.enemyPile);
+        move("5,b", game.currentState.deck.cards, game.currentState.enemyPile);
         move("1,c", game.currentState.deck.cards, game.currentState.enemyPile);
         move("1,o", game.currentState.deck.cards, game.currentState.enemyPile);
         move("9,c", game.currentState.deck.cards, game.currentState.enemyPile);
@@ -228,7 +229,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(1000);
+                game.suggestMove(100000);
                 break;
             case 'q':
                 finished = true;
