@@ -73,15 +73,14 @@ vector<shared_ptr<Card>> toVector(string s, Deck &d) {
 
 void move(string stringCard, vector<shared_ptr<Card>> &v1, vector<shared_ptr<Card>> &v2) {
     vector<string> vectorCard = split(stringCard, ",");
-    vector<shared_ptr<Card>>::iterator it;
+    auto it = v1.begin();
     shared_ptr<Card> tmp = nullptr;
     try {
-        for (it = v1.begin(); it != v1.end(); ++it) {
+        while (it != v1.end() || tmp != nullptr) {
             if (it->get()->getValue() == stoi(vectorCard[0]) && it->get()->getSeed() == sToSeed(vectorCard[1])) {
                 tmp = *it;
-                v1.erase(it);
                 v2.push_back(tmp);
-                it--;
+                v1.erase(it);
             }
         }
         if (tmp == nullptr) {
@@ -197,7 +196,26 @@ int main() {
         game.initGame(tableCards, myHand1, myHand2, player);
 
     } else {
-        game.initRandomGame();
+        //game.initRandomGame();
+        game.currentState.setWhoPlays(1);
+        game.currentState.setTurn(8);
+        move("3,c", game.currentState.deck.cards, game.currentState.myHand1);
+        move("2,c", game.currentState.deck.cards, game.currentState.myHand1);
+        move("8,c", game.currentState.deck.cards, game.currentState.myHand2);
+        move("3,b", game.currentState.deck.cards, game.currentState.enemyHand1);
+        move("9,b", game.currentState.deck.cards, game.currentState.enemyHand2);
+        move("10,b", game.currentState.deck.cards, game.currentState.myPile);
+        move("3,o", game.currentState.deck.cards, game.currentState.myPile);
+        move("7,b", game.currentState.deck.cards, game.currentState.myPile);
+        move("5,s", game.currentState.deck.cards, game.currentState.enemyPile);
+        move("5,s", game.currentState.deck.cards, game.currentState.enemyPile);
+        move("1,c", game.currentState.deck.cards, game.currentState.enemyPile);
+        move("1,o", game.currentState.deck.cards, game.currentState.enemyPile);
+        move("9,c", game.currentState.deck.cards, game.currentState.enemyPile);
+        move("9,s", game.currentState.deck.cards, game.currentState.enemyPile);
+        moveToTable("1,s", game.currentState.deck.cards, game.currentState);
+        moveToTable("6,s", game.currentState.deck.cards, game.currentState);
+        game.currentState.deck.shuffle();
     }
     game.currentState.printState();
     bool finished = false;
@@ -210,7 +228,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(100);
+                game.suggestMove(1000);
                 break;
             case 'q':
                 finished = true;
@@ -226,38 +244,57 @@ int main() {
                         string s1;
                         cin >> s1;
                         if (s1 == "none") {
-                            switch (game.currentState.getWhoPlays()) {
-                                case 1 :
-                                    moveToTable(s, game.currentState.myHand1, game.currentState);
-                                    break;
-                                case 2 :
-                                    moveToTable(s, game.currentState.enemyHand1, game.currentState);
-                                    break;
-                                case 3 :
-                                    moveToTable(s, game.currentState.myHand2, game.currentState);
-                                    break;
-                                case 4 :
-                                    moveToTable(s, game.currentState.enemyHand2, game.currentState);
-                                    break;
+                            if (game.currentState.getWhoPlays() == 1) {
+                                moveToTable(s, game.currentState.myHand1, game.currentState);
+                            } else if (game.currentState.getWhoPlays() == 3) {
+                                moveToTable(s, game.currentState.myHand2, game.currentState);
+                            } else if (game.currentState.getWhoPlays() % 2 == 0) {
+                                short c1 = game.currentState.enemyHand1.size();
+                                short c2 = game.currentState.enemyHand2.size();
+                                for (short i = 0; i < c1; ++i) {
+                                    game.currentState.deck.cards.push_back(game.currentState.enemyHand1[i]);
+                                }
+                                for (short i = 0; i < c2; ++i) {
+                                    game.currentState.deck.cards.push_back(game.currentState.enemyHand2[i]);
+                                }
+                                moveToTable(s, game.currentState.deck.cards, game.currentState);
+                                game.currentState.enemyHand1.clear();
+                                game.currentState.enemyHand2.clear();
+                                if (game.currentState.getWhoPlays() == 2) { c1--; } else { c2--; }
+                                for (short i = 0; i < c1; ++i) {
+                                    game.currentState.enemyHand1.push_back(game.currentState.deck.drawCard());
+                                }
+                                for (short i = 0; i < c2; ++i) {
+                                    game.currentState.enemyHand2.push_back(game.currentState.deck.drawCard());
+                                }
                             }
                             game.advanceGame();
                             correct = true;
                         } else {
-                            switch (game.currentState.getWhoPlays()) {
-                                case 1 :
-                                    move(s, game.currentState.myHand1, game.currentState.myPile);
-                                    break;
-                                case 2 :
-                                    move(s, game.currentState.enemyHand1, game.currentState.enemyPile);
-                                    break;
-                                case 3 :
-                                    move(s, game.currentState.myHand2, game.currentState.myPile);
-                                    break;
-                                case 4 :
-                                    move(s, game.currentState.enemyHand2, game.currentState.enemyPile);
-                                    break;
+                            if (game.currentState.getWhoPlays() == 1) {
+                                move(s, game.currentState.myHand1, game.currentState.myPile);
+                            } else if (game.currentState.getWhoPlays() == 3) {
+                                move(s, game.currentState.myHand2, game.currentState.myPile);
+                            } else if (game.currentState.getWhoPlays() % 2 == 0) {
+                                short c1 = game.currentState.enemyHand1.size();
+                                short c2 = game.currentState.enemyHand2.size();
+                                for (short i = 0; i < c1; ++i) {
+                                    game.currentState.deck.cards.push_back(game.currentState.enemyHand1[i]);
+                                }
+                                for (short i = 0; i < c2; ++i) {
+                                    game.currentState.deck.cards.push_back(game.currentState.enemyHand2[i]);
+                                }
+                                game.currentState.enemyHand1.clear();
+                                game.currentState.enemyHand2.clear();
+                                move(s, game.currentState.deck.cards, game.currentState.enemyPile);
+                                if (game.currentState.getWhoPlays() == 2) { c1--; } else { c2--; }
+                                for (short i = 0; i < c1; ++i) {
+                                    game.currentState.enemyHand1.push_back(game.currentState.deck.drawCard());
+                                }
+                                for (short i = 0; i < c2; ++i) {
+                                    game.currentState.enemyHand2.push_back(game.currentState.deck.drawCard());
+                                }
                             }
-
                             vector<string> tableCardsChosen = split(s1, ";");
                             vector<string>::iterator it;
                             for (it = tableCardsChosen.begin(); it != tableCardsChosen.end(); it++) {

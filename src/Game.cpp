@@ -190,6 +190,7 @@ int Game::rollOut(bool verbose) {
     while (!gameOver) {
         playerPlaysCard(currentState.getWhoPlays());
         advanceGame();
+        //currentState.printState();
     }
     vector<shared_ptr<Card>>::iterator it;
     for (it = currentState.tableCards.begin(); it != currentState.tableCards.end(); ++it) {
@@ -304,25 +305,45 @@ short Game::random_at_most(short max) {
 //task given to thread
 void Game::simulateGames(State state, int times, short card) {
     cout << endl << ">>>simulating games with card " << card << endl;
+    time_t start = time(nullptr);
     Game game(state);
     game.playerPlaysCard(state.getWhoPlays(), card);
     game.advanceGame();
+    short enemyCards1 = game.currentState.enemyHand1.size();
+    short enemyCards2 = game.currentState.enemyHand2.size();
+    for (int j = 0; j < enemyCards1; ++j) {
+        game.currentState.deck.cards.push_back(game.currentState.enemyHand1[j]);
+    }
+    for (int j = 0; j < enemyCards2; ++j) {
+        game.currentState.deck.cards.push_back(game.currentState.enemyHand2[j]);
+    }
+    game.currentState.enemyHand1.clear();
+    game.currentState.enemyHand2.clear();
+    game.currentState.deck.shuffle();
     Game copyGame = game;
     int p = 0;
     for (int i = 0; i < times; ++i) {
         game.currentState.deck.shuffle();
+        for (int j = 0; j < enemyCards1; ++j) {
+            game.currentState.enemyHand1.push_back(game.currentState.deck.drawCard());
+        }
+        for (int j = 0; j < enemyCards2; ++j) {
+            game.currentState.enemyHand2.push_back(game.currentState.deck.drawCard());
+        }
+        //game.currentState.printState();
         p += game.rollOut(false);
         //TODO do we free up memory this way?
         game = copyGame;
     }
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << ">>>playing card " << card << " you score: " << p << endl;
+    cout << ">>>finished in " << time(nullptr) - start << " seconds" << endl;
 };
 
 //simulate "accuracy" times the game for each possible move
 void Game::suggestMove(int accuracy) {
     cout << ">>running simulation for " << accuracy << endl;
-    for (int i = 0; i < currentState.getCurrentPlayerHand()->size(); ++i) {
+    for (short i = 0; i < currentState.getCurrentPlayerHand()->size(); ++i) {
         //std::thread::thread t(simulateGames, accuracy);
         simulateGames(currentState, accuracy, i);
     }
