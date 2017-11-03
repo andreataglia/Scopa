@@ -2,8 +2,11 @@
 #include "Game.h"
 #include <stdio.h>
 #include <string.h>
+#include "ThreadPool.h"
 
 using namespace std;
+
+static mutex simulation_lock;
 
 Card::Seed sToSeed(string s) {
     try {
@@ -119,6 +122,7 @@ int main() {
 
     State current_state;
     Game game(current_state);
+    ThreadPool threadPool(0);
     cout << "Do you want to initialize a game? y/n" << std::endl;
     string choice;
     cin >> choice;
@@ -209,7 +213,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(10000);
+                game.suggestMove(100000, threadPool);
                 break;
             case 'q':
                 finished = true;
@@ -372,8 +376,8 @@ int main() {
 
         }
         game.currentState.printState();
-
-        return 0;
     }
+        return 0;
+
 }
 

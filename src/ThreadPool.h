@@ -18,16 +18,20 @@ private:
     std::vector<std::thread> threads; //! Worker threads
     void worker_thread();
 
+    std::mutex joinMutex;
+    std::condition_variable joinCV;
+
 public:
     ThreadPool(int nr_threads = 0);
     virtual ~ThreadPool();
-    void pushTask(std::function<void ()> func) {
-// SynchronizedQueue guarantees mutual exclusive access
+    void pushTask(std::function<void()> func) {
         work_queue.put(func);
     }
     int getWorkQueueLength() {
         return work_queue.size();
     }
+
+    void join();
 };
 
 
