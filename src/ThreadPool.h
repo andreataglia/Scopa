@@ -7,6 +7,7 @@
 #include <thread>
 #include <vector>
 #include "SynchronizedQueue.h"
+#include "mingw.thread.h"
 
 class ThreadPool
 {

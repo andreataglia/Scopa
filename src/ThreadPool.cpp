@@ -3,7 +3,6 @@
 //
 
 #include "ThreadPool.h"
-#include <thread>
 
 void doNothing() {}
 
