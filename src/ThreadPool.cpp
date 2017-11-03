@@ -3,6 +3,8 @@
 //
 
 #include "ThreadPool.h"
+#include <thread>
+#include <iostream>
 
 void doNothing() {}
 
@@ -26,7 +28,7 @@ ThreadPool::~ThreadPool() {
 void ThreadPool::worker_thread() {
     while (!done) {
         work_queue.get()(); //Get a function and call it
-
+        threadWaiting --;
         {
             std::unique_lock<std::mutex> lck(joinMutex);
             joinCV.notify_one();
@@ -36,7 +38,7 @@ void ThreadPool::worker_thread() {
 
 void ThreadPool::join(){
     std::unique_lock<std::mutex> lck(joinMutex);
-    while (work_queue.size() != 0){
+    while (threadWaiting != 0){
         joinCV.wait(lck);
     }
 }
