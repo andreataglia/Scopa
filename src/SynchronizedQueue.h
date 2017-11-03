@@ -18,7 +18,7 @@ public:
 
     T get();
 
-    int size();
+    size_t size();
 
 private:
     SynchronizedQueue(const SynchronizedQueue &) = delete;

@@ -23,7 +23,8 @@ T SynchronizedQueue<T>::get() {
     return result;
 }
 
-int SynchronizedQueue::size() {
+template<typename T>
+size_t SynchronizedQueue<T>::size() {
     std::unique_lock<std::mutex> lck(myMutex);
     return queue.size();
 }
