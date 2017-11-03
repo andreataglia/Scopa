@@ -7,6 +7,7 @@
 
 #include "State.h"
 #include "Deck.h"
+#include "ThreadPool.h"
 
 class Game {
 public:
@@ -22,7 +23,7 @@ public:
 
     void advanceGame();
 
-    void suggestMove(int accuracy);
+    void suggestMove(int accuracy, ThreadPool &threadPool);
 
     static short random_at_most(short max);
 
@@ -43,6 +44,8 @@ private:
     void resolveCardPlayed(int player, shared_ptr<Card> card);
 
     void simulateGames(State state, int times, short card);
+
+
 };
 
 

@@ -3,6 +3,9 @@
 #include <iostream>
 #include <thread>
 #include "Game.h"
+#include "SimulationLock.h"
+#include "ThreadPool.h"
+#include <mutex>
 
 Game::Game(State state) {
     currentState = state;
@@ -304,7 +307,7 @@ short Game::random_at_most(short max) {
 
 //task given to thread
 void Game::simulateGames(State state, int times, short card) {
-    cout << endl << ">>>simulating games with card " << card << endl;
+
     time_t start = time(nullptr);
     Game game(state);
     game.playerPlaysCard(state.getWhoPlays(), card);
@@ -335,16 +338,25 @@ void Game::simulateGames(State state, int times, short card) {
         //TODO do we free up memory this way?
         game = copyGame;
     }
+
+    SimulationMutex.lock();
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << ">>>playing card " << card << " you score: " << p << endl;
     cout << ">>>finished in " << time(nullptr) - start << " seconds" << endl;
+    SimulationMutex.unlock();
 };
 
+void ciao(){
+    cout << "cazzo" << endl;
+}
+
 //simulate "accuracy" times the game for each possible move
-void Game::suggestMove(int accuracy) {
+void Game::suggestMove(int accuracy, ThreadPool &threadPool) {
     cout << ">>running simulation for " << accuracy << endl;
     for (short i = 0; i < currentState.getCurrentPlayerHand()->size(); ++i) {
-        //std::thread::thread t(simulateGames, accuracy);
-        simulateGames(currentState, accuracy, i);
+        auto function1 = bind(&Game::simulateGames, this, currentState, accuracy, i);
+        threadPool.pushTask(function1);
     }
+
+    threadPool.join();
 }
