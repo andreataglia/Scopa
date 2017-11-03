@@ -347,7 +347,6 @@ void Game::simulateGames(State state, int times, short card) {
 };
 
 void ciao(){
-    cout << "cazzo" << endl;
 }
 
 //simulate "accuracy" times the game for each possible move

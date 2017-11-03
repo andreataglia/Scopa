@@ -11,10 +11,8 @@
 class ThreadPool
 {
 private:
-    std::atomic<bool> done; //! Thread pool status
-    unsigned int thread_count; //! Thread pool size
+
     SynchronizedQueue<std::function<void()>> work_queue;
-    std::vector<std::thread> threads; //! Worker threads
     void worker_thread();
 
     std::mutex joinMutex;
@@ -24,11 +22,17 @@ public:
     ThreadPool(int nr_threads = 0);
     virtual ~ThreadPool();
     void pushTask(std::function<void()> func) {
+        threadWaiting++;
         work_queue.put(func);
     }
     int getWorkQueueLength() {
         return work_queue.size();
     }
+
+    int threadWaiting;
+    unsigned int thread_count; //! Thread pool size
+    std::atomic<bool> done; //! Thread pool status
+    std::vector<std::thread> threads; //! Worker threads
 
     void join();
 };

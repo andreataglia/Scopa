@@ -213,7 +213,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(100000, threadPool);
+                game.suggestMove(10000, threadPool);
                 break;
             case 'q':
                 finished = true;
