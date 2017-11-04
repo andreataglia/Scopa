@@ -97,7 +97,8 @@ void State::setWhoPlays(int _whoPlays) {
 
 void State::printState() {
     vector<shared_ptr<Card>>::iterator it;
-    cout << endl << "myHand1: ";
+    cout << endl << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << "myHand1: ";
     for (it = myHand1.begin(); it != myHand1.end(); ++it) {
         it->get()->printCard();
     }

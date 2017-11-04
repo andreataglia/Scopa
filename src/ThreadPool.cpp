@@ -14,7 +14,7 @@ ThreadPool::ThreadPool(int nr_threads) : done(false) {
     else
         thread_count = nr_threads;
     for (unsigned int i = 0; i < thread_count; ++i)
-        threads.push_back(std::thread(&ThreadPool::worker_thread, this));
+        threads.emplace_back(&ThreadPool::worker_thread, this);
 }
 
 ThreadPool::~ThreadPool() {
@@ -28,7 +28,7 @@ ThreadPool::~ThreadPool() {
 void ThreadPool::worker_thread() {
     while (!done) {
         work_queue.get()(); //Get a function and call it
-        threadWaiting --;
+        workingThreads--;
         {
             std::unique_lock<std::mutex> lck(joinMutex);
             joinCV.notify_one();
@@ -36,9 +36,9 @@ void ThreadPool::worker_thread() {
     }
 }
 
-void ThreadPool::join(){
+void ThreadPool::join() {
     std::unique_lock<std::mutex> lck(joinMutex);
-    while (threadWaiting != 0){
+    while (workingThreads != 0) {
         joinCV.wait(lck);
     }
 }

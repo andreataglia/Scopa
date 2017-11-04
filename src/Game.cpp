@@ -12,9 +12,12 @@ Game::Game(State state) {
 }
 
 void
-Game::initGame(vector<shared_ptr<Card>> tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2, int playerWhoPlays) {
+Game::initGame(vector<shared_ptr<Card>> &tableCards, vector<shared_ptr<Card>> myHand1, vector<shared_ptr<Card>> myHand2,
+               int playerWhoPlays) {
     currentState.setWhoPlays(playerWhoPlays);
-    currentState.tableCards = tableCards;
+    for (int j = 0; j < tableCards.size(); ++j) {
+        currentState.addCardToTable(tableCards[j]);
+    }
     currentState.myHand1 = myHand1;
     currentState.myHand2 = myHand2;
     for (int i = 0; i < 3; ++i) {
@@ -84,7 +87,8 @@ void Game::resolveCardPlayed(int player, shared_ptr<Card> card) {
         while (!resolved && i < currentState.tableCards.size()) {
             while (!resolved && k < currentState.tableCards.size()) {
                 while (!resolved && j < currentState.tableCards.size()) {
-                    if (currentState.tableCards[i]->getValue() + currentState.tableCards[k]->getValue() + currentState.tableCards[j]->getValue() ==
+                    if (currentState.tableCards[i]->getValue() + currentState.tableCards[k]->getValue() +
+                        currentState.tableCards[j]->getValue() ==
                         card->getValue()) {
                         resolved = true;
                         lastPlayerToCatch = player;
@@ -307,8 +311,6 @@ short Game::random_at_most(short max) {
 
 //task given to thread
 void Game::simulateGames(State state, int times, short card) {
-
-    time_t start = time(nullptr);
     Game game(state);
     game.playerPlaysCard(state.getWhoPlays(), card);
     game.advanceGame();
@@ -342,15 +344,15 @@ void Game::simulateGames(State state, int times, short card) {
     SimulationMutex.lock();
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << ">>>playing card " << card << " you score: " << p << endl;
-    cout << ">>>finished in " << time(nullptr) - start << " seconds" << endl;
     SimulationMutex.unlock();
 };
 
-void ciao(){
+void ciao() {
 }
 
 //simulate "accuracy" times the game for each possible move
 void Game::suggestMove(int accuracy, ThreadPool &threadPool) {
+    time_t start = time(nullptr);
     cout << ">>running simulation for " << accuracy << endl;
     for (short i = 0; i < currentState.getCurrentPlayerHand()->size(); ++i) {
         auto function1 = bind(&Game::simulateGames, this, currentState, accuracy, i);
@@ -358,4 +360,6 @@ void Game::suggestMove(int accuracy, ThreadPool &threadPool) {
     }
 
     threadPool.join();
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << ">>>>>>>>>finished in " << time(nullptr) - start << " seconds" << endl;
 }

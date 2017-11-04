@@ -23,15 +23,15 @@ public:
     ThreadPool(int nr_threads = 0);
     virtual ~ThreadPool();
     void pushTask(std::function<void()> func) {
-        threadWaiting++;
         work_queue.put(func);
+        workingThreads++;
     }
     int getWorkQueueLength() {
         return work_queue.size();
     }
 
-    int threadWaiting;
-    unsigned int thread_count; //! Thread pool size
+    int workingThreads = 0;
+    int thread_count; //! Thread pool size
     std::atomic<bool> done; //! Thread pool status
     std::vector<std::thread> threads; //! Worker threads
 

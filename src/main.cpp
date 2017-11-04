@@ -136,8 +136,7 @@ int main() {
         bool correct = false;
         while (!correct) {
             try {
-                cout << "give me the table cards in this way:" << endl << " 1 di ori = 1,o" << endl
-                     << " followed by a ; like this:" << endl << " 1,o;2,s;3,b;4,c" << endl;
+                cout << "give me the table cards in this way:" << endl << " 1 di ori = 1,o followed by a ; like this: 1,o;2,s;3,b;4,c" << endl;
                 string s;
                 cin >> s;
                 tableCards = toVectorFromDeck(s, game.currentState.deck);
@@ -202,10 +201,9 @@ int main() {
     }
     game.currentState.printState();
     bool finished = false;
-    bool correct;
     while (!finished) {
         cout
-                << "\n choose what do you want to do:\nm->make an action\ns->suggest an action\nd->draw cards for my players\np->print state\nq->quit"
+                << "\n>>choose what do you want to do:\nm->make an action\ns->suggest an action\nd->draw cards for my players\np->print state\nq->quit"
                 << endl;
         cin >> choice;
         switch (choice.at(0)) {
@@ -213,7 +211,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(10000, threadPool);
+                game.suggestMove(100000, threadPool);
                 break;
             case 'q':
                 finished = true;
@@ -276,10 +274,10 @@ int main() {
                 catch (const std::exception &e) {
                     // general (unexpected) error
                     std::cerr << "Unexpected ERROR: " << e.what() << std::endl;
+                    game = checkpointGame;
                 }
                 break;
-            case 'm':
-                correct = false;
+            case 'm':;
                 checkpointGame = game;
                 try {
                     string s;
@@ -314,7 +312,6 @@ int main() {
                             }
                         }
                         game.advanceGame();
-                        correct = true;
                     } else {
                         if (game.currentState.getWhoPlays() == 1) {
                             move(s, game.currentState.myHand1, game.currentState.myPile);
@@ -356,7 +353,6 @@ int main() {
                             } else game.enemyPoints++;
                         }
                         game.advanceGame();
-                        correct = true;
                     }
                 }
                 catch (int e) {
@@ -368,6 +364,7 @@ int main() {
                 catch (const std::exception &e) {
                     // general (unexpected) error
                     std::cerr << "Unexpected ERROR: " << e.what() << std::endl;
+                    game = checkpointGame;
                 }
 
                 break;
@@ -377,7 +374,7 @@ int main() {
         }
         game.currentState.printState();
     }
-        return 0;
+    return 0;
 
 }
 

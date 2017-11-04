@@ -5,7 +5,8 @@
 #ifndef SYNC_QUEUE_H_
 #define SYNC_QUEUE_H_
 #include <list>
-#include <mutex>
+#include "mingw.mutex.h"
+#include "mingw.condition_variable.h"
 #include <condition_variable>
 
 template<typename T>

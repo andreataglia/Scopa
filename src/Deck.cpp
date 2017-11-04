@@ -61,7 +61,6 @@ shared_ptr<Card> Deck::drawCard(int value, Card::Seed seed){
             if(it->get()->getValue() == value && it->get()->getSeed() == seed){
                 shared_ptr<Card> tmp = *it;
                 cards.erase(it);
-                print();
                 return tmp;
             }
         }
