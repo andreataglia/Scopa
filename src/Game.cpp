@@ -347,9 +347,6 @@ void Game::simulateGames(State state, int times, short card) {
     SimulationMutex.unlock();
 };
 
-void ciao() {
-}
-
 //simulate "accuracy" times the game for each possible move
 void Game::suggestMove(int accuracy, ThreadPool &threadPool) {
     time_t start = time(nullptr);

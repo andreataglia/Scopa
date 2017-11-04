@@ -98,32 +98,32 @@ void State::setWhoPlays(int _whoPlays) {
 void State::printState() {
     vector<shared_ptr<Card>>::iterator it;
     cout << endl << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout << "myHand1: ";
-    for (it = myHand1.begin(); it != myHand1.end(); ++it) {
-        it->get()->printCard();
-    }
-    cout << endl << "myHand2: ";
+    cout << "             ";
+    if (getWhoPlays() == 4) cout << " <- ";
     for (it = myHand2.begin(); it != myHand2.end(); ++it) {
         it->get()->printCard();
     }
-    cout << endl << "enemyHand1: ";
-    for (it = enemyHand1.begin(); it != enemyHand1.end(); ++it) {
+    if (getWhoPlays() == 3) cout << " <- ";
+
+    cout << endl << endl;
+    for (it = tableCards.begin(); it != tableCards.end(); ++it) {
         it->get()->printCard();
     }
-    cout << endl << "enemyHand2: ";
-    for (it = enemyHand2.begin(); it != enemyHand2.end(); ++it) {
+
+    cout << endl << endl;
+    cout << "             ";
+    if (getWhoPlays() == 1) cout << " -> ";
+    for (it = myHand1.begin(); it != myHand1.end(); ++it) {
         it->get()->printCard();
     }
-    cout << endl << "myPile: ";
+    if (getWhoPlays() == 2) cout << " -> ";
+
+    cout << endl  << endl << "myPile: ";
     for (it = myPile.begin(); it != myPile.end(); ++it) {
         it->get()->printCard();
     }
     cout << endl << "enemyPile: ";
     for (it = enemyPile.begin(); it != enemyPile.end(); ++it) {
-        it->get()->printCard();
-    }
-    cout << endl << "tableCards: ";
-    for (it = tableCards.begin(); it != tableCards.end(); ++it) {
         it->get()->printCard();
     }
     cout << endl << "current turn: " << getTurn();

@@ -203,7 +203,7 @@ int main() {
     bool finished = false;
     while (!finished) {
         cout
-                << "\n>>choose what do you want to do:\nm->make an action\ns->suggest an action\nd->draw cards for my players\np->print state\nq->quit"
+                << "\n>>choose action:\nm->make an action\ns->suggest an action\nd->draw cards for my players\np->print state\nq->quit"
                 << endl;
         cin >> choice;
         switch (choice.at(0)) {
@@ -211,7 +211,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(100000, threadPool);
+                game.suggestMove(50000, threadPool);
                 break;
             case 'q':
                 finished = true;

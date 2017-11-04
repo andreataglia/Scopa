@@ -20,7 +20,7 @@ private:
     std::condition_variable joinCV;
 
 public:
-    ThreadPool(int nr_threads = 0);
+    explicit ThreadPool(int nr_threads = 0);
     virtual ~ThreadPool();
     void pushTask(std::function<void()> func) {
         work_queue.put(func);

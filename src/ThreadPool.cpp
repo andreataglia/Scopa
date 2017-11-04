@@ -14,6 +14,7 @@ ThreadPool::ThreadPool(int nr_threads) : done(false) {
     else
         thread_count = nr_threads;
     for (unsigned int i = 0; i < thread_count; ++i)
+        //it pushes function which are executed from an implicitly created thread
         threads.emplace_back(&ThreadPool::worker_thread, this);
 }
 
