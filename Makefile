@@ -3,7 +3,7 @@ SRCDIR := ./src/
 GCC := g++
 CXXFLAGS := -std=c++11 -pthread
 
-SRC := $(addprefix $(SRCDIR), ThreadPool.cpp Card.cpp Game.cpp Deck.cpp State.cpp main.cpp)
+SRC := $(addprefix $(SRCDIR), Card.cpp Game.cpp Deck.cpp State.cpp main.cpp)
 OBJECTS := $(addsuffix .o, $(basename $(SRC)))
 
 all: $(NAME)

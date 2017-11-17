@@ -6,7 +6,7 @@
 #include <thread>
 #include <iostream>
 
-void doNothing() {}
+std::vector<int> doNothing() {return std::vector<int>{0};}
 
 ThreadPool::ThreadPool(int nr_threads) : done(false) {
     if (nr_threads <= 0)
@@ -20,15 +20,33 @@ ThreadPool::ThreadPool(int nr_threads) : done(false) {
 
 ThreadPool::~ThreadPool() {
     done = true;
-    for (unsigned int i = 0; i < thread_count; ++i) pushTask(&doNothing);
+    for (unsigned int i = 0; i < thread_count; ++i){
+      packaged_task<std::vector<int>()> tsk(&doNothing);   
+      work_queue.put(tsk);
+    }
     for (auto &th: threads)
         if (th.joinable())
             th.join();
 }
 
+void ThreadPool::pushTask(std::packaged_task<std::vector<int>()> func) {
+        work_queue.put(func);
+        workingThreads++;
+}
+
 void ThreadPool::worker_thread() {
     while (!done) {
-        work_queue.get()(); //Get a function and call it
+        auto task = work_queue.get();
+        future<std::vector<int>> fut = task.get_future();
+        task();
+        std::vector<int> v = fut.get();
+        
+        {
+            std::unique_lock<std::mutex> lck(resultsMutex);
+            simulationResults.push_back(v[0]);
+            simulationResults.push_back(v[1]);
+        }
+
         workingThreads--;
         {
             std::unique_lock<std::mutex> lck(joinMutex);
@@ -42,4 +60,11 @@ void ThreadPool::join() {
     while (workingThreads != 0) {
         joinCV.wait(lck);
     }
+}
+
+std::vector<int> ThreadPool::getResults(){
+    join();
+    auto temp = simulationResults;
+    simulationResults.clear();
+    return temp;
 }

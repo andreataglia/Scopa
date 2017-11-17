@@ -4,8 +4,8 @@
 #include <thread>
 #include "Game.h"
 #include "SimulationLock.h"
-#include "ThreadPool.h"
 #include <mutex>
+#include <future>
 
 Game::Game(State state) {
     currentState = state;
@@ -310,7 +310,7 @@ short Game::random_at_most(short max) {
 }
 
 //task given to thread
-void Game::simulateGames(State state, int times, short card) {
+int Game::simulateGames(State state, int times, short card) {
     Game game(state);
     game.playerPlaysCard(state.getWhoPlays(), card);
     game.advanceGame();
@@ -341,22 +341,40 @@ void Game::simulateGames(State state, int times, short card) {
         game = copyGame;
     }
 
-    SimulationMutex.lock();
+    /*SimulationMutex.lock();
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << ">>>playing card " << card << " you score: " << p << endl;
     SimulationMutex.unlock();
+    std::vector<int> v;
+    v.push_back(card);
+    v.push_back(p);*/
+    return p;
 };
 
 //simulate "accuracy" times the game for each possible move
-void Game::suggestMove(int accuracy, ThreadPool &threadPool) {
+void Game::suggestMove(int accuracy) {
     time_t start = time(nullptr);
+    std::vector<std::future<int>> futures;
     cout << ">>running simulation for " << accuracy << endl;
-    for (short i = 0; i < currentState.getCurrentPlayerHand()->size(); ++i) {
-        auto function1 = bind(&Game::simulateGames, this, currentState, accuracy, i);
-        threadPool.pushTask(function1);
+    short n = currentState.getCurrentPlayerHand()->size();
+    for (short i = 0; i < n; ++i) {
+        std::function<int()> function1 = bind(&Game::simulateGames, this, currentState, accuracy, i);
+        futures.push_back(std::async(std::launch::async, function1));
     }
 
-    threadPool.join();
+    shared_ptr<Card> bestCard;
+    if (n > 0){
+       bestCard = currentState.getCurrentPlayerHand()->at(0);
+    }
+    int best = -accuracy;
+    std::vector<int> res;
+    for (short i = 0; i < n; ++i) {
+        res.push_back(futures[i].get());
+        if (res[i] > best) bestCard = currentState.getCurrentPlayerHand()->at(i);
+        cout << "plaing card " << i  << " :: "<< res[i] << endl;
+    }
+
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     cout << ">>>>>>>>>finished in " << time(nullptr) - start << " seconds" << endl;
+    bestCard->printCard();
 }

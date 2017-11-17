@@ -3,29 +3,29 @@
 
 #include <atomic>
 #include <functional>
+#include <future>
 #include <mutex>
 #include <thread>
 #include <vector>
+#include "State.h"
 #include "SynchronizedQueue.h"
-#include "mingw.thread.h"
 
 class ThreadPool
 {
 private:
 
-    SynchronizedQueue<std::function<void()>> work_queue;
+    SynchronizedQueue<std::packaged_task<std::vector<int>()>> work_queue;
     void worker_thread();
 
     std::mutex joinMutex;
     std::condition_variable joinCV;
-
+    std::vector<int> simulationResults; //even values = card index, odd values = simulation result for the previous card
+    std::mutex resultsMutex;
 public:
     explicit ThreadPool(int nr_threads = 0);
     virtual ~ThreadPool();
-    void pushTask(std::function<void()> func) {
-        work_queue.put(func);
-        workingThreads++;
-    }
+    void pushTask(std::packaged_task<std::vector<int>()> func);
+
     int getWorkQueueLength() {
         return work_queue.size();
     }
@@ -36,6 +36,7 @@ public:
     std::vector<std::thread> threads; //! Worker threads
 
     void join();
+    std::vector<int> getResults();
 };
 
 

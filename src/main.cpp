@@ -2,7 +2,6 @@
 #include "Game.h"
 #include <stdio.h>
 #include <string.h>
-#include "ThreadPool.h"
 
 using namespace std;
 
@@ -122,7 +121,6 @@ int main() {
 
     State current_state;
     Game game(current_state);
-    ThreadPool threadPool(0);
     cout << "Do you want to initialize a game? y/n" << std::endl;
     string choice;
     cin >> choice;
@@ -211,7 +209,7 @@ int main() {
                 game.currentState.printState();
                 break;
             case 's':
-                game.suggestMove(50000, threadPool);
+                game.suggestMove(50000);
                 break;
             case 'q':
                 finished = true;
